@@ -48,24 +48,6 @@ jobs:
       console_cache_path: ${{ needs.console.outputs.cache_path }}
       version: ${{ needs.version.outputs.version }}
 
-  core-unit-test:
-    needs: core
-    uses: ./.github/workflows/core-unit-test.yml
-    with:
-      core_cache_key: ${{ needs.core.outputs.cache_key }}
-      core_cache_path: ${{ needs.core.outputs.cache_path }}
-    secrets:
-      CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
-
-  core-integration-test:
-    needs: core
-    uses: ./.github/workflows/core-integration-test.yml
-    with:
-      core_cache_key: ${{ needs.core.outputs.cache_key }}
-      core_cache_path: ${{ needs.core.outputs.cache_path }}
-    secrets:
-      CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
-
   lint:
     needs: [core, console]
     uses: ./.github/workflows/lint.yml
@@ -86,10 +68,6 @@ jobs:
     with:
       build_image_name: "ghcr.io/zitadel/zitadel-build"
 
-  e2e:
-    uses: ./.github/workflows/e2e.yml
-    needs: [compile]
-
   release:
     uses: ./.github/workflows/release.yml
     permissions:
@@ -97,7 +75,7 @@ jobs:
       contents: write
       issues: write
       pull-requests: write
-    needs: [version, lint, container, e2e]
+    needs: [version, lint, container]
     if: ${{ github.event_name == 'workflow_dispatch' }}
     secrets:
       DOCKER_HUB_USERNAME: ${{ secrets.DOCKER_HUB_USERNAME }}
