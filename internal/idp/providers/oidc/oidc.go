@@ -84,6 +84,17 @@ func WithSelectAccount() ProviderOpts {
 	}
 }
 
+func WithConsent() ProviderOpts {
+	return func(p *Provider) {
+		p.authOptions = append(p.authOptions, func(loginHintSet bool) rp.AuthURLOpt {
+			if loginHintSet {
+				return nil
+			}
+			return rp.WithPrompt(oidc.PromptConsent)
+		})
+	}
+}
+
 // WithResponseMode sets the `response_mode` params in the auth request
 func WithResponseMode(mode oidc.ResponseMode) ProviderOpts {
 	return func(p *Provider) {

@@ -62,11 +62,11 @@ With ZITADEL, you are assured of a robust and customizable turnkey solution for 
 
 Deploying ZITADEL locally takes less than 3 minutes. Go ahead and give it a try!
 
-* [Linux](https://zitadel.com/docs/self-hosting/deploy/linux)
-* [MacOS](https://zitadel.com/docs/self-hosting/deploy/macos)
-* [Docker compose](https://zitadel.com/docs/self-hosting/deploy/compose)
-* [Knative](https://zitadel.com/docs/self-hosting/deploy/knative)
-* [Kubernetes](https://zitadel.com/docs/self-hosting/deploy/kubernetes)
+- [Linux](https://zitadel.com/docs/self-hosting/deploy/linux)
+- [MacOS](https://zitadel.com/docs/self-hosting/deploy/macos)
+- [Docker compose](https://zitadel.com/docs/self-hosting/deploy/compose)
+- [Knative](https://zitadel.com/docs/self-hosting/deploy/knative)
+- [Kubernetes](https://zitadel.com/docs/self-hosting/deploy/kubernetes)
 
 See all guides [here](https://zitadel.com/docs/self-hosting/deploy/overview)
 
@@ -75,11 +75,12 @@ See all guides [here](https://zitadel.com/docs/self-hosting/deploy/overview)
 ### Setup ZITADEL Cloud (SaaS)
 
 If you want to experience a hands-free ZITADEL, you should use [ZITADEL Cloud](https://zitadel.com).
-Available data regions are: 
-* 🇺🇸 United States
-* 🇪🇺 European Union
-* 🇦🇺 Australia
-* 🇨🇭 Switzerland
+Available data regions are:
+
+- 🇺🇸 United States
+- 🇪🇺 European Union
+- 🇦🇺 Australia
+- 🇨🇭 Switzerland
 
 ZITADEL Cloud comes with a free tier, providing you with all the same features as the open-source version.
 Learn more about the [pay-as-you-go pricing](https://zitadel.com/pricing).
@@ -118,11 +119,11 @@ Authentication
 - Username / Password
 - Multifactor authentication with OTP, U2F, Email OTP, SMS OTP
 - [LDAP](https://zitadel.com/docs/guides/integrate/identity-providers/ldap)
-- [External enterprise identity providers  and social logins](https://zitadel.com/docs/guides/integrate/identity-providers/introduction)
+- [External enterprise identity providers and social logins](https://zitadel.com/docs/guides/integrate/identity-providers/introduction)
 - [Device authorization](https://zitadel.com/docs/guides/solution-scenarios/device-authorization)
 - [OpenID Connect certified](https://openid.net/certification/#OPs) => [OIDC Endpoints](https://zitadel.com/docs/apis/openidoauth/endpoints)
 - [SAML 2.0](http://docs.oasis-open.org/security/saml/Post2.0/sstc-saml-tech-overview-2.0.html) => [SAML Endpoints](https://zitadel.com/docs/apis/saml/endpoints)
-- [Custom sessions](https://zitadel.com/docs/guides/integrate/login-ui/username-password) if you need to go beyond OIDC or SAML 
+- [Custom sessions](https://zitadel.com/docs/guides/integrate/login-ui/username-password) if you need to go beyond OIDC or SAML
 - [Machine-to-machine](https://zitadel.com/docs/guides/integrate/service-users/authenticate-service-users) with JWT profile, Personal Access Tokens (PAT), and Client Credentials
 - [Token exchange and impersonation](https://zitadel.com/docs/guides/integrate/token-exchange)
 - [Beta: Hosted Login V2](https://zitadel.com/docs/guides/integrate/login/hosted-login#hosted-login-version-2-beta) our new login version 2.0
@@ -146,11 +147,13 @@ Integration
 - [Hosted and custom login user interface](https://zitadel.com/docs/guides/integrate/login/login-users)
 
 Self-Service
+
 - [Self-registration](https://zitadel.com/docs/concepts/features/selfservice#registration) including verification
 - [Self-service](https://zitadel.com/docs/concepts/features/selfservice) for end-users, business customers, and administrators
 - [Administration UI (Console)](https://zitadel.com/docs/guides/manage/console/overview)
 
 Deployment
+
 - [Postgres](https://zitadel.com/docs/self-hosting/manage/database#postgres) (version >= 14)
 - [Zero Downtime Updates](https://zitadel.com/docs/concepts/architecture/solution#zero-downtime-updates)
 - [High scalability](https://zitadel.com/docs/self-hosting/manage/production)
@@ -207,3 +210,34 @@ You can find our security policy [here](./SECURITY.md).
 
 Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See our [license](./LICENSE) for detailed information governing permissions and limitations on use.
+
+## Custom ZITADEL Fork
+
+This is a fork of the ZITADEL identity server with custom modifications for self-hosting purposes.
+
+### Custom Changes
+
+The main changes in this fork include:
+
+- Modified the OIDC provider login flow to use `consent` prompt instead of `select_account`
+- Added a new `WithConsent()` option to the OIDC provider for better integration with certain identity providers
+
+### Setup for Docker Build
+
+1. Add your DockerHub token as a GitHub secret:
+
+   - Go to your repository Settings > Secrets and variables > Actions
+   - Create a new repository secret named `DOCKER_HUB_TOKEN` with your DockerHub personal access token
+   - Never paste the actual token value in code or documentation
+
+2. The workflow will automatically build and push to DockerHub on pushes to the main branch.
+
+3. You can also manually trigger the workflow from the Actions tab.
+
+### Using the Custom Docker Image
+
+```bash
+docker pull southguild/zitadel:latest
+```
+
+See below for the original ZITADEL documentation.

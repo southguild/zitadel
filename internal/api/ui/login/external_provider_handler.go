@@ -1029,7 +1029,7 @@ func (l *Login) oidcProvider(ctx context.Context, identityProvider *query.IDPTem
 		return nil, err
 	}
 	opts := make([]openid.ProviderOpts, 1, 3)
-	opts[0] = openid.WithSelectAccount()
+	opts[0] = openid.WithConsent()
 	if identityProvider.OIDCIDPTemplate.IsIDTokenMapping {
 		opts = append(opts, openid.WithIDTokenMapping())
 	}
