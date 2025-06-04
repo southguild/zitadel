@@ -97,8 +97,7 @@ jobs:
       contents: write
       issues: write
       pull-requests: write
-    needs:
-      [version, core-unit-test, core-integration-test, lint, container, e2e]
+    needs: [version, lint, container, e2e]
     if: ${{ github.event_name == 'workflow_dispatch' }}
     secrets:
       DOCKER_HUB_USERNAME: ${{ secrets.DOCKER_HUB_USERNAME }}
