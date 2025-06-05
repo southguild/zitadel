@@ -1,4 +1,4 @@
-name: ZITADEL CI/CD
+name: ZITADEL CI/CD Pipeline
 
 on:
   push:
