@@ -58,15 +58,15 @@ jobs:
       core_cache_key: ${{ needs.core.outputs.cache_key }}
       core_cache_path: ${{ needs.core.outputs.cache_path }}
 
-  container:
-    needs: [compile]
-    uses: ./.github/workflows/container.yml
-    secrets: inherit
-    permissions:
-      packages: write
-    if: ${{ github.event_name == 'workflow_dispatch' }}
-    with:
-      build_image_name: "ghcr.io/zitadel/zitadel-build"
+  # container:
+  #   needs: [compile]
+  #   uses: ./.github/workflows/container.yml
+  #   secrets: inherit
+  #   permissions:
+  #     packages: write
+  #   # if: ${{ github.event_name == 'workflow_dispatch' }}
+  #   with:
+  #     build_image_name: "ghcr.io/zitadel/zitadel-build"
 
   release:
     uses: ./.github/workflows/release.yml
@@ -75,12 +75,12 @@ jobs:
       contents: write
       issues: write
       pull-requests: write
-    needs: [version, lint, container]
-    if: ${{ github.event_name == 'workflow_dispatch' }}
+    needs: [version, lint]
+    # if: ${{ github.event_name == 'workflow_dispatch' }}
     secrets:
       DOCKER_HUB_USERNAME: ${{ secrets.DOCKER_HUB_USERNAME }}
       DOCKER_HUB_TOKEN: ${{ secrets.DOCKER_HUB_TOKEN }}
     with:
-      build_image_name: ${{ needs.container.outputs.build_image }}
+      # build_image_name: ${{ needs.container.outputs.build_image }}
       semantic_version: "23.0.8"
       image_name: "southguild/zitadel"
