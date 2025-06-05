@@ -35,7 +35,7 @@ jobs:
   version:
     uses: ./.github/workflows/version.yml
     with:
-      semantic_version: "23.0.7"
+      semantic_version: "23.0.8"
       dry_run: true
 
   compile:
@@ -82,5 +82,5 @@ jobs:
       DOCKER_HUB_TOKEN: ${{ secrets.DOCKER_HUB_TOKEN }}
     with:
       build_image_name: ${{ needs.container.outputs.build_image }}
-      semantic_version: "23.0.7"
+      semantic_version: "23.0.8"
       image_name: "southguild/zitadel"
