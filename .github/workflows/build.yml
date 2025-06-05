@@ -74,7 +74,7 @@ jobs:
       contents: write
       issues: write
       pull-requests: write
-    needs: [version, lint]
+    needs: [version, lint, container]
     secrets:
       DOCKER_HUB_USERNAME: ${{ secrets.DOCKER_HUB_USERNAME }}
       DOCKER_HUB_TOKEN: ${{ secrets.DOCKER_HUB_TOKEN }}
