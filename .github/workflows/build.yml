@@ -64,7 +64,6 @@ jobs:
     secrets: inherit
     permissions:
       packages: write
-    if: ${{ github.event_name == 'workflow_dispatch' }}
     with:
       build_image_name: "southguild/zitadel-build"
 
@@ -76,7 +75,6 @@ jobs:
       issues: write
       pull-requests: write
     needs: [version, lint]
-    if: ${{ github.event_name == 'workflow_dispatch' }}
     secrets:
       DOCKER_HUB_USERNAME: ${{ secrets.DOCKER_HUB_USERNAME }}
       DOCKER_HUB_TOKEN: ${{ secrets.DOCKER_HUB_TOKEN }}
