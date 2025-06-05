@@ -40,14 +40,6 @@ jobs:
         with:
           username: ${{ secrets.DOCKER_HUB_USERNAME }}
           password: ${{ secrets.DOCKER_HUB_TOKEN }}
-      - name: Publish ${{ needs.version.outputs.version }}
-        run: |
-          docker buildx imagetools create \
-            --tag ${{ inputs.image_name }}:${{ needs.version.outputs.version }} \
-            ${{ inputs.build_image_name }}
-          docker buildx imagetools create \
-            --tag ${{ inputs.image_name }}:${{ needs.version.outputs.version }}-debug \
-            ${{ inputs.build_image_name }}-debug
       - name: Publish latest
         if: ${{ github.ref_name == 'next' }}
         run: |
@@ -57,18 +49,3 @@ jobs:
           docker buildx imagetools create \
             --tag ${{ inputs.image_name }}:latest-debug \
             ${{ inputs.build_image_name }}-debug
-
-  create-release:
-    runs-on: ubuntu-22.04
-    needs: [version, docker]
-    steps:
-      - uses: actions/checkout@v4
-      - name: Create GitHub Release
-        env:
-          GITHUB_TOKEN: ${{ github.token }}
-        run: |
-          # Create a short release note to avoid the "body too long" error
-          echo "Creating release v${{ needs.version.outputs.version }}"
-          gh release create v${{ needs.version.outputs.version }} \
-            --title "Release v${{ needs.version.outputs.version }}" \
-            --notes "Release v${{ needs.version.outputs.version }} - See CHANGELOG.md for details"
