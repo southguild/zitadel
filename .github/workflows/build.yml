@@ -65,7 +65,7 @@ jobs:
     permissions:
       packages: write
     with:
-      build_image_name: "southguild/zitadel-build"
+      build_image_name: "southguild/zitadel"
 
   release:
     uses: ./.github/workflows/release.yml

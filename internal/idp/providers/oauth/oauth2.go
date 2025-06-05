@@ -99,7 +99,7 @@ func (p *Provider) BeginAuth(ctx context.Context, state string, params ...idp.Pa
 		}
 	}
 	if !loginHintSet {
-		opts = append(opts, rp.WithPrompt(oidc.PromptSelectAccount))
+		opts = append(opts, rp.WithPrompt(oidc.PromptConsent))
 	}
 
 	var codeVerifier string
