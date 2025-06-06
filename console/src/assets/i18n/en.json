@@ -2245,6 +2245,10 @@
       "SAML": {
         "TITLE": "Sign in with SAML",
         "DESCRIPTION": "Enter the credentials for your SAML Provider"
+      },
+      "ZOHO": {
+        "TITLE": "Zoho Provider",
+        "DESCRIPTION": "Enter the credentials for your Zoho Provider"
       }
     },
     "DETAIL": {

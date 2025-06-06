@@ -229,6 +229,8 @@ func idpTypeToPb(idpType domain.IDPType) settings.IdentityProviderType {
 		return settings.IdentityProviderType_IDENTITY_PROVIDER_TYPE_APPLE
 	case domain.IDPTypeSAML:
 		return settings.IdentityProviderType_IDENTITY_PROVIDER_TYPE_SAML
+	case domain.IDPTypeZoho:
+		return settings.IdentityProviderType_IDENTITY_PROVIDER_TYPE_ZOHO
 	default:
 		return settings.IdentityProviderType_IDENTITY_PROVIDER_TYPE_UNSPECIFIED
 	}

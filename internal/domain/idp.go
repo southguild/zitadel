@@ -38,6 +38,7 @@ const (
 	IDPTypeGoogle
 	IDPTypeApple
 	IDPTypeSAML
+	IDPTypeZoho
 )
 
 func (t IDPType) GetCSSClass() string {
@@ -54,6 +55,8 @@ func (t IDPType) GetCSSClass() string {
 		return "azure"
 	case IDPTypeApple:
 		return "apple"
+	case IDPTypeZoho:
+		return "zoho"
 	case IDPTypeUnspecified,
 		IDPTypeOIDC,
 		IDPTypeJWT,
@@ -85,6 +88,8 @@ func (t IDPType) DisplayName() string {
 		return "Google"
 	case IDPTypeApple:
 		return "Apple"
+	case IDPTypeZoho:
+		return "Zoho"
 	case IDPTypeUnspecified,
 		IDPTypeOIDC,
 		IDPTypeJWT,

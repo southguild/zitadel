@@ -414,6 +414,8 @@ func providerTypeToPb(idpType domain.IDPType) idp_pb.ProviderType {
 		return idp_pb.ProviderType_PROVIDER_TYPE_APPLE
 	case domain.IDPTypeSAML:
 		return idp_pb.ProviderType_PROVIDER_TYPE_SAML
+	case domain.IDPTypeZoho:
+		return idp_pb.ProviderType_PROVIDER_TYPE_ZOHO
 	case domain.IDPTypeUnspecified:
 		return idp_pb.ProviderType_PROVIDER_TYPE_UNSPECIFIED
 	default:
@@ -479,6 +481,10 @@ func configToPb(config *query.IDPTemplate) *idp_pb.ProviderConfig {
 		samlConfigToPb(providerConfig, config.SAMLIDPTemplate)
 		return providerConfig
 	}
+	if config.ZohoIDPTemplate != nil {
+		zohoConfigToPb(providerConfig, config.ZohoIDPTemplate)
+		return providerConfig
+	}
 	return providerConfig
 }
 
@@ -512,6 +518,18 @@ func oauthConfigToPb(providerConfig *idp_pb.ProviderConfig, template *query.OAut
 func oidcConfigToPb(providerConfig *idp_pb.ProviderConfig, template *query.OIDCIDPTemplate) {
 	providerConfig.Config = &idp_pb.ProviderConfig_Oidc{
 		Oidc: &idp_pb.GenericOIDCConfig{
+			ClientId:         template.ClientID,
+			Issuer:           template.Issuer,
+			Scopes:           template.Scopes,
+			IsIdTokenMapping: template.IsIDTokenMapping,
+			UsePkce:          template.UsePKCE,
+		},
+	}
+}
+
+func zohoConfigToPb(providerConfig *idp_pb.ProviderConfig, template *query.ZohoIDPTemplate) {
+	providerConfig.Config = &idp_pb.ProviderConfig_Zoho{
+		Zoho: &idp_pb.ZohoConfig{
 			ClientId:         template.ClientID,
 			Issuer:           template.Issuer,
 			Scopes:           template.Scopes,

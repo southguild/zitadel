@@ -1,0 +1,59 @@
+services:
+  zitadel:
+    restart: always
+    container_name: zitadel
+    build:
+      context: .
+      dockerfile: build/Dockerfile
+    command: "start-from-init --config /etc/zitadel/config.yaml --masterkeyFile /etc/zitadel/masterkey --tlsMode disabled"
+    networks:
+      - auth-network
+    # Keep port exposed for direct connections if needed
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./config.yaml:/etc/zitadel/config.yaml:ro
+      - ./masterkey:/etc/zitadel/masterkey:ro
+    environment:
+      - ZITADEL_DATABASE_POSTGRES_HOST=zitadel-db
+      - ZITADEL_EXTERNALSECURE=true
+      - ZITADEL_TLS_ENABLED=false
+      - ZITADEL_EXTERNALDOMAIN=auth.southguild.tech
+      - ZITADEL_EXTERNALPORT=443
+      - ZITADEL_LOGSTORE_ACCESS_STDOUT_ENABLED=true
+      # Configure the first instance with proper domain
+      - ZITADEL_FIRSTINSTANCE_INSTANCENAME=auth
+      - ZITADEL_FIRSTINSTANCE_ORG_NAME=zitadel
+      - ZITADEL_FIRSTINSTANCE_ORG_HUMAN_USERNAME=admin
+      - ZITADEL_FIRSTINSTANCE_ORG_HUMAN_PASSWORD=Password1!
+    depends_on:
+      zitadel-db:
+        condition: service_healthy
+
+  # Zitadel Database
+  zitadel-db:
+    image: postgres:17-alpine
+    restart: always
+    container_name: zitadel-db
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=zitadel
+    ports:
+      - "5433:5432"
+    volumes:
+      - zitadel-db-data:/var/lib/postgresql/data
+    networks:
+      - auth-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d zitadel"]
+      interval: 10s
+      timeout: 30s
+      retries: 5
+      start_period: 20s
+volumes:
+  zitadel-db-data:
+
+networks:
+  auth-network:
+    external: true

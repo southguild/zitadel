@@ -1,0 +1,10 @@
+FirstInstance:
+  InstanceName: ZITADEL
+  Org:
+    Name: ZITADEL
+    Human:
+      UserName: admin
+      Password: Password1!
+      PasswordChangeRequired: false
+  OIDCSettings:
+    DevMode: true

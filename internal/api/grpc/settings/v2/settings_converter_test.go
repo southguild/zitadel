@@ -500,6 +500,10 @@ func Test_idpTypeToPb(t *testing.T) {
 			want: settings.IdentityProviderType_IDENTITY_PROVIDER_TYPE_SAML,
 		},
 		{
+			args: args{domain.IDPTypeZoho},
+			want: settings.IdentityProviderType_IDENTITY_PROVIDER_TYPE_ZOHO,
+		},
+		{
 			args: args{99},
 			want: settings.IdentityProviderType_IDENTITY_PROVIDER_TYPE_UNSPECIFIED,
 		},

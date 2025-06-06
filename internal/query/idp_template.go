@@ -47,6 +47,7 @@ type IDPTemplate struct {
 	*LDAPIDPTemplate
 	*AppleIDPTemplate
 	*SAMLIDPTemplate
+	*ZohoIDPTemplate
 }
 
 type IDPTemplates struct {
@@ -166,6 +167,16 @@ type SAMLIDPTemplate struct {
 	NameIDFormat                  sql.Null[domain.SAMLNameIDFormat]
 	TransientMappingAttributeName string
 	FederatedLogoutEnabled        bool
+}
+
+type ZohoIDPTemplate struct {
+	IDPID            string
+	ClientID         string
+	ClientSecret     *crypto.CryptoValue
+	Issuer           string
+	Scopes           database.TextArray[string]
+	IsIDTokenMapping bool
+	UsePKCE          bool
 }
 
 var (
