@@ -359,7 +359,7 @@ func (l *Login) handleExternalLoginCallback(w http.ResponseWriter, r *http.Reque
 			l.externalAuthCallbackFailed(w, r, authReq, nil, nil, err)
 			return
 		}
-		session = openid.NewSession(provider, data.Code, authReq.SelectedIDPConfigArgs)
+		session = zoho.NewSession(provider, data.Code, authReq.SelectedIDPConfigArgs)
 	case domain.IDPTypeJWT,
 		domain.IDPTypeLDAP,
 		domain.IDPTypeUnspecified:
@@ -1584,61 +1584,28 @@ func WrapIdPError(err error) *IdPError {
 	return &IdPError{err: zerrors.CreateZitadelError(err, id, "Errors.User.ExternalIDP.LoginFailedSwitchLocal")}
 }
 
-func (l *Login) zohoProvider(ctx context.Context, identityProvider *query.IDPTemplate) (*openid.Provider, error) {
+func (l *Login) zohoProvider(ctx context.Context, identityProvider *query.IDPTemplate) (*zoho.Provider, error) {
 	secret, err := crypto.DecryptString(identityProvider.ZohoIDPTemplate.ClientSecret, l.idpConfigAlg)
 	if err != nil {
 		return nil, err
 	}
-	opts := make([]zoho.ProviderOptions, 0, 2)
-	// opts = append(opts, zoho.WithConsent())
+	opts := make([]zoho.ProviderOpts, 1, 3)
+	opts = append(opts, zoho.WithConsent()) 
 	if identityProvider.ZohoIDPTemplate.IsIDTokenMapping {
 		opts = append(opts, zoho.WithIDTokenMapping())
 	}
 
 	if identityProvider.ZohoIDPTemplate.UsePKCE {
-		opts = append(opts, zoho.WithPKCE())
+		opts = append(opts, zoho.WithRelyingPartyOption(rp.WithPKCE(nil)))
 	}
 
-	provider, err := zoho.New(
-		identityProvider.Name,
+	return zoho.New(identityProvider.Name,
 		identityProvider.ZohoIDPTemplate.Issuer,
 		identityProvider.ZohoIDPTemplate.ClientID,
 		secret,
 		l.baseURL(ctx)+EndpointExternalLoginCallback,
 		identityProvider.ZohoIDPTemplate.Scopes,
+		zoho.DefaultMapper,
 		opts...,
 	)
-	if err != nil {
-		return nil, err
-	}
-	return provider.Provider, nil
 }
-
-
-
-// func (l *Login) oidcProvider(ctx context.Context, identityProvider *query.IDPTemplate) (*openid.Provider, error) {
-// 	secret, err := crypto.DecryptString(identityProvider.OIDCIDPTemplate.ClientSecret, l.idpConfigAlg)
-// 	if err != nil {
-// 		return nil, err
-// 	}
-// 	opts := make([]openid.ProviderOpts, 1, 3)
-// 	opts[0] = openid.WithConsent()
-// 	if identityProvider.OIDCIDPTemplate.IsIDTokenMapping {
-// 		opts = append(opts, openid.WithIDTokenMapping())
-// 	}
-
-// 	if identityProvider.OIDCIDPTemplate.UsePKCE {
-// 		// we do not pass any cookie handler, since we store the verifier internally, rather than in a cookie
-// 		opts = append(opts, openid.WithRelyingPartyOption(rp.WithPKCE(nil)))
-// 	}
-
-// 	return openid.New(identityProvider.Name,
-// 		identityProvider.OIDCIDPTemplate.Issuer,
-// 		identityProvider.OIDCIDPTemplate.ClientID,
-// 		secret,
-// 		l.baseURL(ctx)+EndpointExternalLoginCallback,
-// 		identityProvider.OIDCIDPTemplate.Scopes,
-// 		openid.DefaultMapper,
-// 		opts...,
-// 	)
-// }
