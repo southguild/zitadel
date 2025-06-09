@@ -50,6 +50,8 @@ import {
   AddSMSProviderTwilioResponse,
   AddSMTPConfigRequest,
   AddSMTPConfigResponse,
+  AddZohoProviderRequest,
+  AddZohoProviderResponse,
   DeactivateIDPRequest,
   DeactivateIDPResponse,
   DeactivateSMSProviderRequest,
@@ -306,6 +308,8 @@ import {
   UpdateSMTPConfigPasswordResponse,
   UpdateSMTPConfigRequest,
   UpdateSMTPConfigResponse,
+  UpdateZohoProviderRequest,
+  UpdateZohoProviderResponse,
 } from '../proto/generated/zitadel/admin_pb';
 import { Event } from '../proto/generated/zitadel/event_pb';
 import {
@@ -1292,6 +1296,14 @@ export class AdminService {
     req: UpdateGenericOIDCProviderRequest,
   ): Promise<UpdateGenericOIDCProviderResponse.AsObject> {
     return this.grpcService.admin.updateGenericOIDCProvider(req, null).then((resp) => resp.toObject());
+  }
+
+  public addZohoProvider(req: AddZohoProviderRequest): Promise<AddZohoProviderResponse.AsObject> {
+    return this.grpcService.admin.addZohoProvider(req, null).then((resp) => resp.toObject());
+  }
+
+  public updateZohoProvider(req: UpdateZohoProviderRequest): Promise<UpdateZohoProviderResponse.AsObject> {
+    return this.grpcService.admin.updateZohoProvider(req, null).then((resp) => resp.toObject());
   }
 
   public addGenericOAuthProvider(req: AddGenericOAuthProviderRequest): Promise<AddGenericOAuthProviderResponse.AsObject> {

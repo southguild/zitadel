@@ -89,6 +89,10 @@ import {
   AddSecondFactorToLoginPolicyResponse,
   AddUserGrantRequest,
   AddUserGrantResponse,
+  AddZohoProviderRequest,
+  AddZohoProviderResponse,
+  MigrateZohoProviderRequest,
+  MigrateZohoProviderResponse,
   BulkAddProjectRolesRequest,
   BulkAddProjectRolesResponse,
   BulkRemoveUserGrantRequest,
@@ -528,6 +532,8 @@ import {
   UpdateUserGrantResponse,
   UpdateUserNameRequest,
   UpdateUserNameResponse,
+  UpdateZohoProviderRequest,
+  UpdateZohoProviderResponse,
   ValidateOrgDomainRequest,
   ValidateOrgDomainResponse,
 } from '../proto/generated/zitadel/management_pb';
@@ -1045,6 +1051,14 @@ export class ManagementService {
 
   public addGenericOIDCProvider(req: AddGenericOIDCProviderRequest): Promise<AddGenericOIDCProviderResponse.AsObject> {
     return this.grpcService.mgmt.addGenericOIDCProvider(req, null).then((resp) => resp.toObject());
+  }
+
+  public addZohoProvider(req: AddZohoProviderRequest): Promise<AddZohoProviderResponse.AsObject> {
+    return this.grpcService.mgmt.addZohoProvider(req, null).then((resp) => resp.toObject());
+  }
+
+  public updateZohoProvider(req: UpdateZohoProviderRequest): Promise<UpdateZohoProviderResponse.AsObject> {
+    return this.grpcService.mgmt.updateZohoProvider(req, null).then((resp) => resp.toObject());
   }
 
   public updateGenericOIDCProvider(

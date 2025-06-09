@@ -6,15 +6,15 @@ import { MatChipInputEvent } from '@angular/material/chips';
 import { ActivatedRoute } from '@angular/router';
 import { BehaviorSubject, take } from 'rxjs';
 import {
-  AddGenericOIDCProviderRequest as AdminAddGenericOIDCProviderRequest,
+  AddZohoProviderRequest as AdminAddZohoProviderRequest,
   GetProviderByIDRequest as AdminGetProviderByIDRequest,
-  UpdateGenericOIDCProviderRequest as AdminUpdateGenericOIDCProviderRequest,
+  UpdateZohoProviderRequest as AdminUpdateZohoProviderRequest,
 } from 'src/app/proto/generated/zitadel/admin_pb';
 import { AutoLinkingOption, Options, Provider } from 'src/app/proto/generated/zitadel/idp_pb';
 import {
-  AddGenericOIDCProviderRequest as MgmtAddGenericOIDCProviderRequest,
+  AddZohoProviderRequest as MgmtAddZohoProviderRequest,
   GetProviderByIDRequest as MgmtGetProviderByIDRequest,
-  UpdateGenericOIDCProviderRequest as MgmtUpdateGenericOIDCProviderRequest,
+  UpdateZohoProviderRequest as MgmtUpdateZohoProviderRequest,
 } from 'src/app/proto/generated/zitadel/management_pb';
 import { AdminService } from 'src/app/services/admin.service';
 import { Breadcrumb, BreadcrumbService, BreadcrumbType } from 'src/app/services/breadcrumb.service';
@@ -80,9 +80,9 @@ export class ProviderZohoComponent {
   ) {
     this.form = new UntypedFormGroup({
       name: new UntypedFormControl('', [requiredValidator]),
+      issuer: new UntypedFormControl('', [requiredValidator]),
       clientId: new UntypedFormControl('', [requiredValidator]),
       clientSecret: new UntypedFormControl('', [requiredValidator]),
-      issuer: new UntypedFormControl('', [requiredValidator]),
       scopesList: new UntypedFormControl(['openid', 'profile', 'email'], []),
       isIdTokenMapping: new UntypedFormControl(),
       usePkce: new UntypedFormControl(false),
@@ -150,19 +150,19 @@ export class ProviderZohoComponent {
   }
 
   public submitForm(): void {
-    this.provider || this.justCreated$.value ? this.updateGenericOIDCProvider() : this.addGenericOIDCProvider();
+    this.provider || this.justCreated$.value ? this.updateZohoProvider() : this.addZohoProvider();
   }
 
-  public addGenericOIDCProvider(): void {
+  public addZohoProvider(): void {
     const req =
       this.serviceType === PolicyComponentServiceType.MGMT
-        ? new MgmtAddGenericOIDCProviderRequest()
-        : new AdminAddGenericOIDCProviderRequest();
+        ? new MgmtAddZohoProviderRequest()
+        : new AdminAddZohoProviderRequest();
 
     req.setName(this.name?.value);
+    req.setIssuer(this.issuer?.value);
     req.setClientId(this.clientId?.value);
     req.setClientSecret(this.clientSecret?.value);
-    req.setIssuer(this.issuer?.value);
     req.setScopesList(this.scopesList?.value);
     req.setProviderOptions(this.options);
     req.setIsIdTokenMapping(this.isIdTokenMapping?.value);
@@ -170,7 +170,7 @@ export class ProviderZohoComponent {
 
     this.loading = true;
     this.service
-      .addGenericOIDCProvider(req)
+      .addZohoProvider(req)
       .then((addedIDP) => {
         this.justCreated$.next(addedIDP.id);
         this.loading = false;
@@ -181,17 +181,17 @@ export class ProviderZohoComponent {
       });
   }
 
-  public updateGenericOIDCProvider(): void {
+  public updateZohoProvider(): void {
     if (this.provider || this.justCreated$.value) {
       const req =
         this.serviceType === PolicyComponentServiceType.MGMT
-          ? new MgmtUpdateGenericOIDCProviderRequest()
-          : new AdminUpdateGenericOIDCProviderRequest();
+          ? new MgmtUpdateZohoProviderRequest()
+          : new AdminUpdateZohoProviderRequest();
       req.setId(this.provider?.id || this.justCreated$.value);
       req.setName(this.name?.value);
+      req.setIssuer(this.issuer?.value);
       req.setClientId(this.clientId?.value);
       req.setClientSecret(this.clientSecret?.value);
-      req.setIssuer(this.issuer?.value);
       req.setScopesList(this.scopesList?.value);
       req.setProviderOptions(this.options);
       req.setIsIdTokenMapping(this.isIdTokenMapping?.value);
@@ -199,7 +199,7 @@ export class ProviderZohoComponent {
 
       this.loading = true;
       this.service
-        .updateGenericOIDCProvider(req)
+        .updateZohoProvider(req)
         .then(() => {
           setTimeout(() => {
             this.loading = false;
@@ -245,16 +245,16 @@ export class ProviderZohoComponent {
     return this.form.get('name');
   }
 
+  public get issuer(): AbstractControl | null {
+    return this.form.get('issuer');
+  }
+
   public get clientId(): AbstractControl | null {
     return this.form.get('clientId');
   }
 
   public get clientSecret(): AbstractControl | null {
     return this.form.get('clientSecret');
-  }
-
-  public get issuer(): AbstractControl | null {
-    return this.form.get('issuer');
   }
 
   public get scopesList(): AbstractControl | null {
