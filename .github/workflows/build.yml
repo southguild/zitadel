@@ -5,7 +5,8 @@ on:
     tags-ignore:
       - "*"
     branches:
-      - "main"
+      # - "main"
+      - "zoho-idp"
   pull_request:
   workflow_dispatch:
 
